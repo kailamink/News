@@ -25,6 +25,6 @@ public class NewsClient
 
     public Observable<ListOfArticles> getTopHeadlines()
     {
-        return api.getTopHeadlines(_context.getProperties().getProperty("NewsApiKey"));
+        return api.getTopHeadlines(_context.getProperties().getProperty("NewsApiKey"), "us");
     }
 }

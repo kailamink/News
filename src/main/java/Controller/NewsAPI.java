@@ -8,6 +8,7 @@ import retrofit2.http.Query;
 public interface NewsAPI
 {
     @GET("/v2/top-headlines")
-    Observable<ListOfArticles> getTopHeadlines(@Query("apiKey") String apiKey);
+    Observable<ListOfArticles> getTopHeadlines(@Query("apiKey") String apiKey
+                                 ,@Query("country") String country);
 
 }
