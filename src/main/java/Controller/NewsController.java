@@ -14,6 +14,7 @@ public class NewsController
     {
         _context = context;
     }
+    //TODO refactor
     public NewsContext getTopHeadlines()
     {
         GetTopHeadlines getTopHeadlines = new GetTopHeadlines();

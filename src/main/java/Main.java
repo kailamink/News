@@ -12,8 +12,8 @@ public class Main {
         Properties properties = new Properties();
         properties.load(new FileInputStream("config.properties"));
 
-        NewsController newsController = new NewsController(new NewsContext(properties));
-        NewsFrame newsFrame = new NewsFrame(newsController);
+//        NewsController newsController = new NewsController());
+        NewsFrame newsFrame = new NewsFrame(new NewsContext(properties));
         newsFrame.setVisible(true);
     }
 }

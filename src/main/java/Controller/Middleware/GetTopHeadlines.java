@@ -1,7 +1,9 @@
 package Controller.Middleware;
 
 import Controller.NewsClient;
+import Model.ListOfArticles;
 import Model.NewsContext;
+import io.reactivex.Observable;
 import io.reactivex.disposables.Disposable;
 import io.reactivex.schedulers.Schedulers;
 
@@ -26,14 +28,7 @@ public class GetTopHeadlines implements IMiddleware<NewsContext> {
     public void process(NewsContext context)
     {
         NewsClient newsClient = new NewsClient(context);
-        Disposable disposable = newsClient.getTopHeadlines()
-                .subscribeOn(Schedulers.io())
-                .observeOn(Schedulers.trampoline())
-                .subscribe(listOfArticles -> {
-                    context.setListOfArticles(listOfArticles);
-                    context.getNewsFrame().setSideBar();
-                });
-        context.setDisposable(disposable);
+        Observable<ListOfArticles> topHeadlines = newsClient.getTopHeadlines();
         invokeProcess(context);
     }
 }
