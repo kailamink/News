@@ -2,6 +2,7 @@ package View;
 
 import Controller.NewsClient;
 import Model.Article;
+import Model.ListOfArticles;
 import Model.NewsContext;
 import io.reactivex.disposables.Disposable;
 import io.reactivex.schedulers.Schedulers;
@@ -19,6 +20,7 @@ public class NewsFrame extends JFrame
     private JScrollPane _articleScrollPane;
     private Disposable _disposable;
     private ArticlePanel _articlePanel;
+    private ListOfArticles _listOfArticles;
 
     public NewsFrame(NewsContext context)
     {
@@ -38,12 +40,11 @@ public class NewsFrame extends JFrame
         NewsClient newsClient = new NewsClient(_context);
         _disposable = newsClient.getTopHeadlines()
                 .subscribeOn(Schedulers.io())
-                .observeOn(Schedulers.io())
+                .observeOn(Schedulers.trampoline())
                 .subscribe(listOfArticles -> {
-                    _context.setListOfArticles(listOfArticles);
+                    _listOfArticles = listOfArticles;
                     setSideBar();
                 });
-        _context.setDisposable(_disposable);
         onWindowClose();
     }
 
@@ -65,7 +66,7 @@ public class NewsFrame extends JFrame
     private void setSideBar()
     {
         DefaultListModel listModel = new DefaultListModel();
-        for (Article article : _context.getListOfArticles().articles) {
+        for (Article article : _listOfArticles.articles) {
             String headline = article.getTitle();
             listModel.addElement(headline.length() > 39
                                 ? headline.substring(0, 39) + "..."
@@ -85,15 +86,16 @@ public class NewsFrame extends JFrame
 
     private void updateNewsStory(int headlineIndex)
     {
-        _articlePanel.updatePanel(_context.getListOfArticles().articles.get(headlineIndex));
-        System.out.println(_context.getListOfArticles().articles.get(headlineIndex).getTitle());
+        Article article = _listOfArticles.articles.get(headlineIndex);
+        _articlePanel.updatePanel(article);
+        System.out.println(article.getTitle());
     }
 
     private void onWindowClose()
     {
         addWindowListener(new WindowAdapter(){
             public void windowClosing(WindowEvent e) {
-                _context.getDisposable().dispose();
+                _disposable.dispose();
             }
         });
     }

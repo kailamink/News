@@ -2,8 +2,10 @@ package View;
 
 import Model.Article;
 
+import javax.imageio.ImageIO;
 import javax.swing.*;
 import java.awt.*;
+import java.io.IOException;
 import java.net.MalformedURLException;
 import java.net.URI;
 import java.net.URISyntaxException;
@@ -73,11 +75,11 @@ public class ArticlePanel extends JPanel
 
     public void setImageLabel(String url) {
         try {
-            Image image = new ImageIcon(new URL(url))
-                    .getImage()
-                    .getScaledInstance(300,200, Image.SCALE_SMOOTH);
+            Image image = ImageIO.read(new URL(url)).getScaledInstance(300,200,Image.SCALE_SMOOTH);
             _imageLabel.setIcon(new ImageIcon(image));
         } catch (MalformedURLException e) {
+            e.printStackTrace();
+        } catch (IOException e) {
             e.printStackTrace();
         }
     }
