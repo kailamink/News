@@ -11,21 +11,23 @@ import java.net.URL;
 
 public class ArticlePanel extends JPanel
 {
-    private JLabel _title;
-    private JLabel _authorName;
+    private JTextArea _title;
+    private JTextArea _authorName;
     private JLabel _imageLabel;
     private JTextArea _content;
     private JButton _url;
 
+    private int _openWebPageTries;
+
     public ArticlePanel()
     {
-        _title = new JLabel();
-        _authorName = new JLabel();
+        _title = new JTextArea();
+        _authorName = new JTextArea();
         _imageLabel = new JLabel();
         _content = new JTextArea();
         _url = new JButton();
 
-        setLayout(new BoxLayout(this, BoxLayout.PAGE_AXIS ));
+        setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
         add(_title);
         add(_authorName);
         add(_imageLabel);
@@ -34,25 +36,46 @@ public class ArticlePanel extends JPanel
     }
 
     public void updatePanel(Article article) {
-        _title.setText(article.getTitle());
+        _title.setText(createLineBreaksInString(article.getTitle()));
         _authorName.setText(article.getAuthor());
         setImageLabel(article.getUrlToImage());
-        _content.setText(article.getContent());
-        _url.setText(article.getUrl());
+        _content.setText(createLineBreaksInString(article.getContent()));
+        _url.setText("Click here to browse the full article");
+        _openWebPageTries = 0;
         _url.addActionListener(actionEvent -> {
             try {
-                openWebpage(new URL(_url.getText()));
+                if(_openWebPageTries == 0) {
+                    openWebpage(new URL(article.getUrl()));
+                }
+                ++_openWebPageTries;
             } catch (MalformedURLException e) {
                 e.printStackTrace();
             }
         });
     }
 
+    public String createLineBreaksInString(String str)
+    {
+        int index = 0;
+        StringBuilder stringBuilder = new StringBuilder();
+        if(str != null) {
+            String[] strArray = str.split(" ");
+            for (String s : strArray) {
+                stringBuilder.append(s + " ");
+                if (index % 15 == 0 && index != 0) {
+                    stringBuilder.append(System.lineSeparator());
+                }
+                ++index;
+            }
+        }
+        return stringBuilder.toString();
+    }
+
     public void setImageLabel(String url) {
         try {
             Image image = new ImageIcon(new URL(url))
                     .getImage()
-                    .getScaledInstance(200,100, Image.SCALE_SMOOTH);
+                    .getScaledInstance(300,200, Image.SCALE_SMOOTH);
             _imageLabel.setIcon(new ImageIcon(image));
         } catch (MalformedURLException e) {
             e.printStackTrace();

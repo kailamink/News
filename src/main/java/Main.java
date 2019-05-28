@@ -1,4 +1,3 @@
-import Controller.NewsController;
 import Model.NewsContext;
 import View.NewsFrame;
 

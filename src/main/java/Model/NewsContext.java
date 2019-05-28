@@ -1,9 +1,5 @@
 package Model;
 
-import Controller.NewsController;
-import View.NewsFrame;
-import io.reactivex.Observable;
-import io.reactivex.Observer;
 import io.reactivex.disposables.Disposable;
 
 import java.util.Properties;
