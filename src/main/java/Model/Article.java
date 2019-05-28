@@ -7,6 +7,7 @@ public class Article
     private String title;
     private String description;
     private String urlToImage;
+    private String url;
     private String publishedAt;
     private String content;
 
@@ -14,6 +15,7 @@ public class Article
         return source;
     }
 
+    public String getUrl() { return url; }
     public String getAuthor() {
         return author;
     }
